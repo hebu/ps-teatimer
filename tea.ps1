@@ -52,7 +52,12 @@ function New-Alarm
 		if (($timespan.Seconds % 5) -eq 0) {
 			Write-Verbose ("{0} -- {1} >= {2} = {3}" -f $status, $timespan.TotalSeconds, $goalSeconds, $($timespan.Seconds -ge $goalSeconds));
 		}
-		Write-Progress -Activity "Tick tick tick ..." -status "$status" -percentComplete ([int][Math]::Floor($timespan.TotalSeconds) / $goalSeconds * 100)
+		
+		$percentage = ([int][Math]::Floor($timespan.TotalSeconds) / $goalSeconds * 100)
+		if ($percentage -gt 100) {
+			$percentage = 100
+		}
+		Write-Progress -Activity "Tick tick tick ..." -status "$status" -percentComplete $percentage
     }
     until($timespan.TotalSeconds -ge $goalSeconds)
 	
